@@ -22,6 +22,7 @@ const login = async(req, res) => {
 
         if(result) {
             const token = jwt.sign({ idUser: login.UID }, 'SECRET');
+            res.cookie('auth', token);
             return res.status(200).send({
                 message: 'Usuário autenticado com sucesso!',
                 token: token
