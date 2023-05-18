@@ -1,8 +1,8 @@
 const express = require('express');
-const router = express.Router();
+const caseController = require('../controllers/caseController');
+const caseMiddleware = require('../middlewares/caseMiddleware');
 
-const caseController = require('./controllers/caseController');
-const caseMiddleware = require('./middlewares/caseMiddleware');
+const router = express.Router();
 
 router.get('/cases', caseController.getAll);
 router.post('/cases', caseMiddleware.ValidatorBody, caseController.create);
