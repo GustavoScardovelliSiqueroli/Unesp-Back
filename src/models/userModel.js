@@ -17,11 +17,10 @@ const create = async(User) => {
 };
 
 const login = async(User) => {
-    const { user } = User;
     const query = 'SELECT UID, user, password FROM user WHERE user = ?';
-    const result = await connection.execute(query, [user]);
-    console.log(result[0]);
-    return result[0];
+    const result = await connection.execute(query, [User]);
+    console.log(result[0][0]);
+    return result[0][0];
 };
 
 module.exports = {

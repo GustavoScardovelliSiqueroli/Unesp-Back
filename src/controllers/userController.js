@@ -10,18 +10,24 @@ const create = async(req, res) => {
 };
 
 const login = async(req, res) => {
-    const login = await userModel.login(req.body);
-    console.log(req.body.password, login.password);
-    bcrypt.compare(req.body.password, login.password, (err, result) => {
+    const { user, password } = req.body;
+    const User = await userModel.login(user);
+    console.log(password, User.password);
+
+    bcrypt.compare(req.body.password, User.password, (err, result) => {
+
         if (err) {
             return res.status(401).send({ message: 'Usuário não autenticado.', err: err.message });
         }
+
         if(result) {
             const token = jwt.sign({ idUser: login.UID }, 'SECRET');
-            res.status(200).send({
+            return res.status(200).send({
                 message: 'Usuário autenticado com sucesso!',
                 token: token
             });
+        } else {
+            return res.status(401).send({ message: 'Usuário não autenticado.' });
         }
     });
 };
