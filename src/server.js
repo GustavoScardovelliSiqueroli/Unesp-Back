@@ -1,9 +1,7 @@
 const app = require('./app');
-require('dotenv').config();
+const config = require('../config');
 
-const port = 3000;
-
-app.listen(port, () => {
-    console.log('Servidor rodando na porta', port);
+app.listen(config.PORT, () => {
+    console.log('Servidor rodando na porta', config.PORT);
 });
 

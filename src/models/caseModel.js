@@ -9,21 +9,21 @@ const getAll = async () => {
 const create = async (cases) => {
     const created = new Date();
     const { latitude, longitude, status } = cases;
-    const query = 'INSERT INTO cases (latitude, longitude, status, created) VALUES (?, ?, ?, ?)';
-    const result = await connection.execute(query, [latitude, longitude, status, created]);
+    const sql = 'INSERT INTO cases (latitude, longitude, status, created) VALUES (?, ?, ?, ?)';
+    const result = await connection.execute(sql, [latitude, longitude, status, created]);
     return result;
 };
 
 const update = async (cases) => {
     const { id, latitude, longitude, status } = cases;
-    const query = 'UPDATE cases SET latitude = ?, longitude = ?, status = ? WHERE id = ?';
-    const result = await connection.execute(query, [latitude, longitude, status, id]);
+    const sql = 'UPDATE cases SET latitude = ?, longitude = ?, status = ? WHERE id = ?';
+    const result = await connection.execute(sql, [latitude, longitude, status, id]);
     return result;
 };
 
 const deleteCase = async (id) => {
-    const query = 'DELETE FROM cases WHERE id = ?';
-    const result = await connection.execute(query, [id]);
+    const sql = 'DELETE FROM cases WHERE id = ?';
+    const result = await connection.execute(sql, [id]);
     return result;
 };
 

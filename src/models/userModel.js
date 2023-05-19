@@ -3,24 +3,36 @@ const bcrypt = require('bcrypt');
 const {v4: uuidv4} = require('uuid');
 
 
-const create = async(User) => {
-    const created = new Date();
-    const UID = uuidv4();
-    const { user, password, email, role } = User;
+const create = async (User) => {
+    try {
+        const created = new Date();
+        const role = 'supervisor';
+        const UID = uuidv4();
+        const { user, password, email } = User;
 
-    await bcrypt.hash(password, 10, async(err, hash) => {
-        if(err) { return err; }
-        const query = 'INSERT INTO user (UID, user, password, email, role, created) VALUES(?, ?, ?, ?, ?, ?)';
-        const result = await connection.execute(query, [UID, user, hash, email, role, created]);
+        const hash = await bcrypt.hash(password, 10);
+        const sql = 'INSERT INTO user (UID, user, password, email, role, created) VALUES (?, ?, ?, ?, ?, ?)';
+        const [result] = await connection.execute(sql, [UID, user, hash, email, role, created]);
+
+        console.log(result);
         return result;
-    });
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+            throw new Error();
+        }
+        throw err;
+    }
 };
 
 const login = async(User) => {
-    const query = 'SELECT UID, user, password FROM user WHERE user = ?';
-    const result = await connection.execute(query, [User]);
-    console.log(result[0][0]);
-    return result[0][0];
+    try{
+        const sql = 'SELECT UID, user, password FROM user WHERE user = ?';
+        const result = await connection.execute(sql, [User]);
+
+        return result[0][0];
+    } catch(err) {
+        throw new Error();
+    }
 };
 
 module.exports = {

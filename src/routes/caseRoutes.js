@@ -5,9 +5,9 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/cases',authMiddleware.verifyToken, caseController.getAll);
-router.post('/cases', caseMiddleware.ValidatorBody, caseController.create);
-router.put('/cases/:id', caseMiddleware.ValidatorBody, caseController.update);
-router.delete('/cases/:id', caseController.deleteCase);
+router.get('/cases', authMiddleware.verifyToken, caseController.getAll);
+router.post('/cases', authMiddleware.verifyToken, caseMiddleware.ValidatorBody, caseController.create);
+router.put('/cases/:id', authMiddleware.verifyToken, caseMiddleware.ValidatorBody, caseController.update);
+router.delete('/cases/:id', authMiddleware.verifyToken, caseController.deleteCase);
 
 module.exports = router;
