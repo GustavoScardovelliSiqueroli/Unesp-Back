@@ -16,6 +16,7 @@ const create = async(req, res) => {
 const login = async(req, res) => {
     const { user, password } = req.body;
     const User = await userModel.login(user);
+    const { name, cpf, role } = User;
 
     try{
         bcrypt.compare(password, User.password, (err, result) => {
@@ -27,8 +28,10 @@ const login = async(req, res) => {
             if(result) {
                 const token = jwt.sign({ idUser: login.UID }, config.SECRET, { expiresIn: '1h'});
                 res.header('auth', token);
-                return res.status(200).send({
-                    message: 'Usuário autenticado com sucesso!',
+                return res.status(200).json({
+                    userName: name,
+                    cpf: cpf,
+                    role: role,
                     token: token
                 });
             } else {

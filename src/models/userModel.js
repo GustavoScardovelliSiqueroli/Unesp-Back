@@ -8,13 +8,12 @@ const create = async (User) => {
         const created = new Date();
         const role = 'supervisor';
         const UID = uuidv4();
-        const { user, password, email } = User;
+        const { user, password, cpf,email } = User;
 
         const hash = await bcrypt.hash(password, 10);
-        const sql = 'INSERT INTO user (UID, user, password, email, role, created) VALUES (?, ?, ?, ?, ?, ?)';
-        const [result] = await connection.execute(sql, [UID, user, hash, email, role, created]);
+        const sql = 'INSERT INTO user (UID, user, password, name,cpf,email, role, created) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const [result] = await connection.execute(sql, [UID, user, hash, name, cpf, email, role, created]);
 
-        console.log(result);
         return result;
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY') {
@@ -26,7 +25,7 @@ const create = async (User) => {
 
 const login = async(User) => {
     try{
-        const sql = 'SELECT UID, user, password FROM user WHERE user = ?';
+        const sql = 'SELECT UID, user, password, name, cpf, role FROM user WHERE user = ?';
         const result = await connection.execute(sql, [User]);
 
         return result[0][0];
