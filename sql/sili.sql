@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 18-Maio-2023 às 03:44
+-- Tempo de geração: 20-Maio-2023 às 16:50
 -- Versão do servidor: 5.7.36
 -- versão do PHP: 7.4.26
 
@@ -55,14 +55,24 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `UID` char(36) NOT NULL,
-  `user` longtext NOT NULL,
-  `password` longtext NOT NULL,
+  `password` longtext,
+  `name` varchar(50) NOT NULL,
+  `cpf` varchar(11) NOT NULL,
   `email` longtext NOT NULL,
   `role` varchar(50) NOT NULL,
+  `verificacao` varchar(20) NOT NULL,
   `created` date NOT NULL,
-  `deleted` date NOT NULL,
+  `deleted` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `user`
+--
+
+INSERT INTO `user` (`ID`, `UID`, `password`, `name`, `cpf`, `email`, `role`, `verificacao`, `created`, `deleted`) VALUES
+(1, '434234234234', '$2a$12$hsi63T7OkIw79HYgk6w7xOPX8Rr5a8YogbTh4MCVzDTNzMK1Hy/sG', 'Gustavo', '43063493813', 'gustavo@gmail.com', 'admin', 'verificado', '2023-05-20', NULL),
+(2, '3a66b6b6-7c8a-49e0-8eab-948460f2d61a', '$2b$10$S27Glw.XHPykjn/Jfh9FkO5Cd/xx9SXtN./IzNSa6s0F3FQz1hX0q', 'gustavo costa', '43063493812', 'gustavoc@gmail.com', 'supervisor', 'verificado', '2023-05-20', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
