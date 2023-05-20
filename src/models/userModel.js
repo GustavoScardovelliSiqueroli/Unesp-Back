@@ -25,7 +25,7 @@ const create = async (User) => {
 
 const firstLoginVerify = async (User) => {
     try {
-        const sql = 'SELECT ID, cpf, email, verificacao FROM user WHERE email = ?';
+        const sql = 'SELECT UID, cpf, email, verificacao FROM user WHERE email = ?';
         const result = await connection.execute(sql, [User]);
 
         return result[0][0];
@@ -35,12 +35,12 @@ const firstLoginVerify = async (User) => {
     }
 };
 
-const firstLogin = async (password, id) => {
+const firstLogin = async (password, uid) => {
     const verificacao = 'verificado';
     const hash = await bcrypt.hash(password, 10);
 
-    const sql = 'UPDATE user SET password = ?, verificacao = ? WHERE ID = ?';
-    const result = await connection.execute(sql, [hash, verificacao, id]);
+    const sql = 'UPDATE user SET password = ?, verificacao = ? WHERE UID = ?';
+    const result = await connection.execute(sql, [hash, verificacao, uid]);
 
     return result[0][0];
 };
