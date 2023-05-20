@@ -1,10 +1,10 @@
 const validatorUser = (req, res, next) => {
     const { body } = req;
-    if (body.user === undefined || body.password === undefined || body.email === undefined) {
+    if (body.email === undefined || body.cpf === undefined || body.name === undefined) {
         return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
     }
 
-    if (body.user === '' || body.password === '' || body.email === '') {
+    if (body.email === '' || body.cpf === undefined || body.name === undefined) {
         return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
     }
 
@@ -13,11 +13,11 @@ const validatorUser = (req, res, next) => {
 
 const validatorLogin = (req, res, next) => {
     const { body } = req;
-    if (body.user === undefined || body.password === undefined) {
+    if (body.email === undefined || body.password === undefined) {
         return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
     }
 
-    if (body.user === '' || body.password === '') {
+    if (body.email === '' || body.password === '') {
         return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
     }
 
@@ -25,7 +25,35 @@ const validatorLogin = (req, res, next) => {
 
 };
 
+const validatorFirstLoginVerify = (req, res, next) => {
+    const { body } = req;
+    if (body.email === undefined || body.cpf === undefined) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    if (body.email === '' || body.cpf === '') {
+        return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
+    }
+
+    next();
+};
+
+const validatorFirstLogin = (req, res, next) => {
+    const { body } = req;
+    if (body.password === undefined) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+
+    if (body.password === '') {
+        return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
+    }
+
+    next();
+};
+
 module.exports = {
     validatorUser,
-    validatorLogin
+    validatorLogin,
+    validatorFirstLoginVerify,
+    validatorFirstLogin
 };
