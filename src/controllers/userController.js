@@ -54,7 +54,6 @@ const firstLogin = async(req, res) => {
 const login = async(req, res) => {
     const { email, password } = req.body;
     const User = await userModel.login(email);
-    const { name, cpf, role } = User;
 
     if (!User) {
         return res.status(404).send({ message: 'Usuário não encontrado.' });
@@ -62,6 +61,7 @@ const login = async(req, res) => {
         return res.status(401).send({ message: 'Usuário não verificado.' });
     }else{
         try{
+            const { name, cpf, role } = User;
             bcrypt.compare(password, User.password, (err, result) => {
 
                 if (err) {
