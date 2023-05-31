@@ -22,8 +22,9 @@ const update = async (cases) => {
 };
 
 const deleteCase = async (id) => {
-    const sql = 'DELETE FROM cases WHERE id = ?';
-    const result = await connection.execute(sql, [id]);
+    const date = new Date();
+    const sql = 'UPDATE cases SET deleted = ? WHERE id = ?';
+    const result = await connection.execute(sql, [date, id]);
     return result;
 };
 

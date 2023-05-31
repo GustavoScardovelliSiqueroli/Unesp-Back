@@ -10,45 +10,77 @@ const create = async(req, res) => {
     } catch(err) {
         res.status(500).json({ message: 'O usuário já existe.' });
     }
-
 };
 
 const firstLoginVerify = async(req, res) => {
-    const { email, cpf } = req.body;
-    const User = await userModel.firstLoginVerify(email);
+    try{
+        const { email, cpf } = req.body;
+        const User = await userModel.firstLoginVerify(email);
 
-    if (!User) {
-        res.status(404).json({ message: 'Usuário não encontrado.' });
-    } else if (User.verificacao === 'verificado') {
-        res.status(200).json({
-            message: 'Usuário já verificado.',
-            id: User.UID
-        });
-    } else {
-        if (User.cpf === cpf && User.email === email) {
-            res.status(200).json({
-                message: 'Usuário encontrado.',
+        if (!User) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+        } else if (User.verificacao === 'verificado') {
+            return res.status(200).json({
+                message: 'Usuário já verificado.',
                 id: User.UID
             });
         } else {
-            res.status(404).json({ message: 'Usuário não encontrado.' });
+            if (User.cpf === cpf && User.email === email) {
+                return res.status(200).json({
+                    message: 'Usuário encontrado.',
+                    id: User.UID
+                });
+            } else {
+                return res.status(404).json({ message: 'Usuário não encontrado.' });
+            }
         }
+    } catch(err) {
+        return res.status(500).json({
+            message: 'Falha ao comunicar com o banco.',
+            error: err.message
+        });
     }
-
 };
 
 const firstLogin = async(req, res) => {
-    const { password } = req.body;
-    const { uid } = req.params;
+    try{
+        const { password } = req.body;
+        const { uid } = req.params;
 
-    const User = await userModel.firstLogin(password, uid);
+        const User = await userModel.firstLogin(password, uid);
 
-    if (!User) {
-        return res.status(200).json({ message: 'Senha criada com sucesso.' });
-    }else{
-        return res.status(404).json({ message: 'Erro ao alterar senha.' });
+        if (!User) {
+            return res.status(200).json({ message: 'Senha criada com sucesso.' });
+        }else{
+            return res.status(404).json({ message: 'Erro ao alterar senha.' });
+        }
+    } catch(err) {
+        return res.status(500).json({
+            message: 'Falha ao comunicar com o banco.',
+            error: err.message
+        });
     }
+};
 
+const changePassword = async(req, res) => {
+    try{
+        const { oldPassword, newPassword, uid } = req.body;
+        const result = await userModel.getPassword(uid);
+        bcrypt.compare(oldPassword, result.password, async (err, result) => {
+            if (!result) {
+                return res.status(401).json( { message: 'Senha incorreta.' } );
+            }
+            if (result) {
+                await userModel.changePassword(newPassword, uid);
+                return res.status(200).json({ message: 'Senha alterada com sucesso!' });
+            }
+        });
+    } catch(err) {
+        return res.status(500).json({
+            message: 'Falha ao comunicar com o banco.',
+            error: err.message
+        });
+    }
 };
 
 const login = async(req, res) => {
@@ -72,7 +104,7 @@ const login = async(req, res) => {
                     const token = jwt.sign({ idUser: login.UID }, config.SECRET, { expiresIn: '1h'});
                     res.header('auth', token);
                     return res.status(200).json({
-                        Name: name,
+                        name: name,
                         cpf: cpf,
                         role: role,
                         token: token
@@ -83,15 +115,15 @@ const login = async(req, res) => {
             });
 
         } catch (err){
-            res.status(500).json({ message: 'Usuário ou senha incorretos.' });
+            return res.status(500).json({ message: 'Usuário ou senha incorretos.' });
         }
     }
-
 };
 
 module.exports = {
     create,
     login,
     firstLoginVerify,
-    firstLogin
+    firstLogin,
+    changePassword
 };
