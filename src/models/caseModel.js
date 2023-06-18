@@ -28,10 +28,17 @@ const deleteCase = async (id) => {
     return result;
 };
 
+const catchCaseByStatus = async(status) => {
+    const sql = 'SELECT * FROM CASES WHERE status = ?';
+    const result = await connection.execute(sql, [status]);
+    return result[0];
+}
+
 
 module.exports = {
     getAll,
     create,
     update,
     deleteCase,
+    catchCaseByStatus
 };

@@ -12,6 +12,21 @@ const ValidatorBody = (req, res, next) => {
     next();
 };
 
+const VerifyStatusValue = (req, res, next) => {
+    const { status } = req.body;
+    if(status === undefined){
+        return res.status(400).json({message: 'O campo status é obrigatório!'});
+    }
+    if(status === 'positivo' || status === 'negativo' || status === 'suspeito'){
+        next();
+    } else {
+        return res.status(400).json({
+            message: 'O campo status recebe somente os valores positivo, negativo ou suspeito.'
+        });
+    }
+};
+
 module.exports = {
     ValidatorBody,
+    VerifyStatusValue
 };

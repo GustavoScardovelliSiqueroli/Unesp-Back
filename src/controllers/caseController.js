@@ -56,9 +56,23 @@ const deleteCase = async (req, res) => {
 
 };
 
+const catchCaseByStatus = async (req, res) => {
+    try{
+        const { status } = req.body;
+        const cases = await caseModel.catchCaseByStatus(status);
+        return res.status(200).json(cases);
+    } catch(err) {
+        return res.status(500).json({
+            message: 'Falha ao comunicar com o banco.',
+            error: err.message
+        });
+    }
+};
+
 module.exports = {
     getAll,
     create,
     update,
     deleteCase,
+    catchCaseByStatus
 };
