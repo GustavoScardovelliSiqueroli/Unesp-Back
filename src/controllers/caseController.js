@@ -55,7 +55,6 @@ const deleteCase = async (req, res) => {
     }
 
 };
-
 const catchCaseByStatus = async (req, res) => {
     try{
         const { status } = req.body;
