@@ -50,6 +50,18 @@ const validatorFirstLogin = (req, res, next) => {
     next();
 };
 
+const validatorVerifyPassword = (req, res, next) => {
+    const { body } = req;
+    if (body.oldPassword === undefined || body.newPassword === undefined || body.repeatPassword === undefined ||
+    body.UID === undefined) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
+    }
+    if (body.oldPassword === '' || body.newPassword === '' || body.repeatPassword === '' || body.UID === '') {
+        return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
+    }
+    next();
+};
+
 const verifyPassword = (req, res, next) => {
 
     const { newPassword } = req.body;
@@ -76,5 +88,6 @@ module.exports = {
     validatorLogin,
     validatorFirstLoginVerify,
     validatorFirstLogin,
-    verifyPassword
+    verifyPassword,
+    validatorVerifyPassword
 };

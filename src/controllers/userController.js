@@ -68,7 +68,7 @@ const changePassword = async(req, res) => {
         if(newPassword === repeatPassword) {
             const result = await userModel.getPassword(uid);
             bcrypt.compare(oldPassword, result.password, async (err, result) => {
-                if (!result) {
+                if (err) {
                     return res.status(401).json( { message: 'Senha incorreta.' } );
                 }
                 if (result) {
@@ -105,7 +105,7 @@ const login = async(req, res) => {
                 }
 
                 if(result) {
-                    const token = jwt.sign({ idUser: login.UID }, config.SECRET, { expiresIn: '1h'});
+                    const token = jwt.sign({ idUser: login.UID }, config.SECRET);
                     res.header('auth', token);
                     return res.status(200).json({
                         UID,
