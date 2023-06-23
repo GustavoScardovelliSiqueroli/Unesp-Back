@@ -64,17 +64,21 @@ const firstLogin = async(req, res) => {
 
 const changePassword = async(req, res) => {
     try{
-        const { oldPassword, newPassword, uid } = req.body;
-        const result = await userModel.getPassword(uid);
-        bcrypt.compare(oldPassword, result.password, async (err, result) => {
-            if (!result) {
-                return res.status(401).json( { message: 'Senha incorreta.' } );
-            }
-            if (result) {
-                await userModel.changePassword(newPassword, uid);
-                return res.status(200).json({ message: 'Senha alterada com sucesso!' });
-            }
-        });
+        const { oldPassword, newPassword, repeatPassword, uid } = req.body;
+        if(newPassword === repeatPassword) {
+            const result = await userModel.getPassword(uid);
+            bcrypt.compare(oldPassword, result.password, async (err, result) => {
+                if (!result) {
+                    return res.status(401).json( { message: 'Senha incorreta.' } );
+                }
+                if (result) {
+                    await userModel.changePassword(newPassword, uid);
+                    return res.status(200).json({ message: 'Senha alterada com sucesso!' });
+                }
+            });
+        } else {
+            return res.status(400).json({ message: 'As senhas não conferem.' });
+        }
     } catch(err) {
         return res.status(500).json({
             message: 'Falha ao comunicar com o banco.',
