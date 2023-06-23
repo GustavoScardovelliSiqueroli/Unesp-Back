@@ -47,7 +47,7 @@ const firstLogin = async (password, uid) => {
 
 const getPassword = async(uid) => {
     try{
-        const sql = 'SELECT password FROM user WHERE uid = ?';
+        const sql = 'SELECT password FROM user WHERE UID = ?';
         const result = await connection.execute(sql, [uid]);
         return result[0][0];
     } catch(err) {
@@ -57,7 +57,7 @@ const getPassword = async(uid) => {
 
 const changePassword = async(password, uid) => {
     try{
-        const sql = 'UPDATE user SET password = ? WHERE uid = ?';
+        const sql = 'UPDATE user SET password = ? WHERE UID = ?';
         const hash = await bcrypt.hash(password, 10);
         const result = await connection.execute(sql, [hash, uid]);
         console.log(result[0]);
@@ -66,10 +66,10 @@ const changePassword = async(password, uid) => {
     }
 };
 
-const login = async(User) => {
+const login = async(email) => {
     try{
         const sql = 'SELECT UID, password, name, cpf, email, role, verificacao FROM user WHERE email = ?';
-        const result = await connection.execute(sql, [User]);
+        const result = await connection.execute(sql, [email]);
 
         return result[0][0];
     } catch(err) {

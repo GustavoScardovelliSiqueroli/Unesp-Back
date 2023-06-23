@@ -93,7 +93,7 @@ const login = async(req, res) => {
         return res.status(401).json({ message: 'Usuário não verificado.' });
     }else{
         try{
-            const { name, cpf, role } = User;
+            const { UID, name, cpf, role } = User;
             bcrypt.compare(password, User.password, (err, result) => {
 
                 if (err) {
@@ -104,6 +104,7 @@ const login = async(req, res) => {
                     const token = jwt.sign({ idUser: login.UID }, config.SECRET, { expiresIn: '1h'});
                     res.header('auth', token);
                     return res.status(200).json({
+                        UID,
                         name: name,
                         cpf: cpf,
                         role: role,

@@ -4,7 +4,7 @@ const validatorUser = (req, res, next) => {
         return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
     }
 
-    if (body.email === '' || body.cpf === undefined || body.name === undefined) {
+    if (body.email === '' || body.cpf === '' || body.name === '') {
         return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
     }
 
@@ -47,7 +47,6 @@ const validatorFirstLogin = (req, res, next) => {
     if (body.password === '') {
         return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
     }
-
     next();
 };
 
