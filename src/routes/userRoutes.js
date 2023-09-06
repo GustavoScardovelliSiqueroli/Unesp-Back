@@ -5,12 +5,12 @@ const userMiddleware = require('../middlewares/userMiddleware');
 
 const router = express.Router();
 
-router.post('/createUser', authMiddleware.verifyToken, userMiddleware.validatorUser, userController.create);
-router.post('/login', userMiddleware.validatorLogin, userController.login);
-router.post('/firstLoginVerify', userMiddleware.validatorFirstLoginVerify, userController.firstLoginVerify);
-router.post('/firstLogin/:id', userMiddleware.validatorFirstLogin, userMiddleware.verifyPassword,
+router.post('/api/createUser', authMiddleware.verifyToken, userMiddleware.validatorUser, userController.create);
+router.post('/api/login', userMiddleware.validatorLogin, userController.login);
+router.post('/api/firstLoginVerify', userMiddleware.validatorFirstLoginVerify, userController.firstLoginVerify);
+router.post('/api/firstLogin/:id', userMiddleware.validatorFirstLogin, userMiddleware.verifyPassword,
     userController.firstLogin);
-router.put('/changePassword', authMiddleware.verifyToken, userMiddleware.validatorVerifyPassword, userMiddleware.verifyPassword,
+router.put('/api/changePassword', authMiddleware.verifyToken, userMiddleware.validatorVerifyPassword, userMiddleware.verifyPassword,
     userController.changePassword);
 
 module.exports = router;
